@@ -1,0 +1,1 @@
+# Paramerters_of_Moore_type_QC-LDPC
