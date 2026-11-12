@@ -5320,7 +5320,17 @@
       "target_multisets": 36
     }
   ],
-  "scope": "Symbolic identities and complete finite distance-proof computations; geometric arguments are given in Supplementary_Material_for_Proposition_25.pdf.",
+  "proof_references": {
+    "coset_lemma": 8,
+    "critical_support_theorem": 24,
+    "even_direction_lemma": 9,
+    "girth_bound_proposition": 16,
+    "multiplicity_moment_lemma": 27,
+    "neighboring_order_theorem": 30,
+    "supplement": "Supplementary_Material_for_Proposition_26.pdf",
+    "support_proposition": 26
+  },
+  "scope": "Computer certificates for Proposition 26, Lemma 27, and Theorem 30. Complete proof and result interpretation: Supplementary_Material_for_Proposition_26.pdf.",
   "status": "passed",
   "summary": {
     "boundary_dimension": 29,
@@ -5351,6 +5361,7 @@
     "Hessian_of_root_form": "proved symbolically with j indeterminate",
     "Hessian_of_z_power_j_times_y_minus_y_power_j_plus_one": "proved symbolically with j indeterminate",
     "catalectic_minor": "-1/h**2",
+    "common_square_bound_gap": "2*(r-1)*(J-r-1)",
     "rank_two_restriction_discriminant": true,
     "tangency_discriminant_equals_negative_dual_form": true
   }

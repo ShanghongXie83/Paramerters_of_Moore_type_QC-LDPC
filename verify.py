@@ -1,10 +1,13 @@
-"""Reproduce all computer checks described in the supplementary proof.
+"""Computer certificates for Proposition 26, Lemma 27, and Theorem 30.
 
-Run: python verify.py
-Output: results.json beside this program.
-Run: python verify.py --check
-Recompute everything and compare it with the existing output file.
-Dependencies: numpy and sympy. No other local input file is needed to compute.
+Run python verify.py to generate results.json.
+Run python verify.py --check to recompute and compare all certificates.
+Dependencies: numpy and sympy.
+
+The program uses h=j+1 and delta=k-j. The integers m_u are the root-
+multiplicity differences of Lemma 27, represented modulo p by q(U).
+The PDF proof and result interpretation are in
+Supplementary_Material_for_Proposition_26.pdf.
 """
 from collections import Counter, deque
 from functools import lru_cache
@@ -41,7 +44,11 @@ def symbolic_checks():
     assert sp.expand(bb*bb-aa*cc+dual) == 0
     r1,r2,s1,s2 = sp.symbols('r1 r2 s1 s2')
     assert sp.expand((r1*s2+r2*s1)**2-4*r1*r2*s1*s2-(r1*s2-r2*s1)**2) == 0
+    J, r = sp.symbols('J r', integer=True)
+    merged_square_sum = (J-r+1)**2+r-1+(r+1)**2+J-r-1
+    assert sp.expand(J**2+J+2-merged_square_sum-2*(r-1)*(J-r-1)) == 0
     return {
+        'common_square_bound_gap': '2*(r-1)*(J-r-1)',
         'Hessian_of_z_power_j_times_y_minus_y_power_j_plus_one': 'proved symbolically with j indeterminate',
         'Hessian_of_root_form': 'proved symbolically with j indeterminate',
         'catalectic_minor': '-1/h**2',
@@ -104,6 +111,10 @@ def moment_screen():
                         multiset_count += 1
                         by_delta[delta] += 1
                         values = pos + tuple(-x for x in neg) + (0,) * (k - len(pos) - len(neg))
+                        # Lemma 27: integer square-sum bound and parity.
+                        square_sum = sum(x*x for x in values)
+                        assert 0 < square_sum <= j*j+3*j+4
+                        assert square_sum % 2 == 0
                         G = 0
                         for v in range(2, (k - 1) // delta + 1):
                             G = gcd(G, abs(sum(x ** v for x in values)))
@@ -285,7 +296,7 @@ def coefficient_check():
 
 
 def generate():
-    result = {'scope': 'Symbolic identities and complete finite distance-proof computations; geometric arguments are given in Supplementary_Material_for_Proposition_25.pdf.', 'symbolic_checks': symbolic_checks()}
+    result = {'scope': 'Computer certificates for Proposition 26, Lemma 27, and Theorem 30. Complete proof and result interpretation: Supplementary_Material_for_Proposition_26.pdf.', 'proof_references': {'support_proposition': 26, 'coset_lemma': 8, 'even_direction_lemma': 9, 'multiplicity_moment_lemma': 27, 'neighboring_order_theorem': 30, 'girth_bound_proposition': 16, 'critical_support_theorem': 24, 'supplement': 'Supplementary_Material_for_Proposition_26.pdf'}, 'symbolic_checks': symbolic_checks()}
     result['moment_screen'] = moment_screen()
     print('moments', result['moment_screen']['parameter_pairs'],
           result['moment_screen']['integer_multisets'],

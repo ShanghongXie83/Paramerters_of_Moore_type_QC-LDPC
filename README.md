@@ -1,64 +1,67 @@
-# Supplementary Proof and Computation for Moore-Type QC-LDPC Codes
+# Supplementary Material for Proposition 26
 
-This repository contains the supplementary proof and reproducible computations for **Exact Parameter Classes and Bounds for Moore-Type QC-LDPC Codes with Odd Prime Size**.
+This package accompanies Proposition 26 of *Exact Parameter Classes and Bounds for Tanner (j,k) QC-LDPC Codes*. It contains the complete proof of the proposition and the computer certificates used in Theorem 30.
 
-The files support the structural result for codeword supports of weight `2j+2` and the finite computations used in the neighboring-orbit-order minimum-distance bound.
+## Files
 
-Repository: [ShanghongXie83/Paramerters_of_Moore_type_QC-LDPC](https://github.com/ShanghongXie83/Paramerters_of_Moore_type_QC-LDPC).
-
-**Files**
-
-| File | Purpose |
+| File | Contents |
 | --- | --- |
-| [Supplementary_Material_for_Proposition_25.pdf](Supplementary_Material_for_Proposition_25.pdf) | Complete proof of the structural proposition (Proposition 26 in manuscript v3.2); the final section explains the computation output and its role in the proofs. The PDF filename is retained across versions. |
-| [verify.py](verify.py) | The single program performing all symbolic checks and finite computations. |
-| [results.json](results.json) | The supplied program-generated results, including a summary and complete finite certificates. |
-| [README.md](README.md) | Installation and reproduction instructions. |
+| `Supplementary_Material_for_Proposition_26.pdf` | Proposition 26, its complete proof, and a section explaining the computation output. |
+| `verify.py` | The single verification program. |
+| `results.json` | The complete program output, including the numerical certificates. |
+| `README.md` | Package description and reproduction instructions. |
 
-**Installation and reproduction**
+## Correspondence with the paper
 
-Download the files from the same repository commit, keep them together, and open a terminal in that directory.
+- Lemma 8: equality of finite product-set cardinalities and the resulting coset structure.
+- Lemma 9: the even-direction bound and the associated Redei-polynomial construction.
+- Proposition 26, parts (i)--(iii): odd column occupancy, the quadratic quotient, and the two root polynomials.
+- Lemma 27: common root-multiplicity and moment constraints, including the square-sum bound.
+- Theorem 30: the minimum-distance bound for neighboring row and column orders.
+- Proposition 16: the girth-based distance bound used at the exceptional prime.
 
-Install the two Python dependencies:
+The PDF recalls the statement of Lemma 9 and its polynomial notation. Its proof is given in the paper. Proposition 26 and its part labels agree with the paper.
 
-```bash
+## Running the verification
+
+Install the dependencies:
+
+```text
 python -m pip install numpy sympy
 ```
 
-To recompute everything and compare with the supplied `results.json`, run:
+Generate the output:
 
-```bash
-python verify.py --check
-```
-
-The comparison file is used only to check the regenerated output, not as mathematical input. A mismatch stops the program and preserves the supplied file.
-
-To generate results without comparing against the supplied file, run:
-
-```bash
+```text
 python verify.py
 ```
 
-This writes or replaces `results.json` next to the program. All computations start from the definitions and parameters in the program.
+The program writes `results.json` next to itself. To recompute all certificates and compare them with the supplied output, run:
 
-No other script, local data file, Magma installation, or network connection is needed after the dependencies have been installed. Use an ordinary Python interpreter without `-O` or `-OO`, since the assertions are mathematical verification checks. NumPy must provide the `bitwise_count` operation; the program reports an actionable error if it is absent.
+```text
+python verify.py --check
+```
 
-The full run enumerates all 536870912 words of the boundary code. It uses bounded integer-array batches and does not store all these words at once. Runtime depends on the machine. Progress appears in the terminal, while all mathematical results are collected in the one JSON file. Successful completion prints `All checks passed`. In comparison mode, any mismatch stops the program and preserves the supplied output file.
+Use the ordinary Python execution mode so that assertions are enabled. NumPy provides the `bitwise_count` operation used in the full kernel enumeration. The program prints progress and reports successful completion after every check has passed.
 
-**Output and verification scope**
+The boundary-code calculation traverses all 536870912 words in bounded integer-array batches. Runtime depends on the machine.
 
-The output contains:
+## Output and proof roles
 
-- `status` and `summary`: completion status and the principal results.
-- `symbolic_checks`: the Hessian identities with an indeterminate order, the nonzero coefficient minor, and the conic restriction identities.
-- `moment_screen`: 69 parameter pairs, 19532 integer multisets, and the 43 surviving candidates.
-- `polynomial_screen`: the three complete normalized polynomial searches and their matching coefficients.
-- `boundary_code`: the reconstructed binary rank, kernel basis, complete weight distribution, and a minimum-weight word.
-- `coefficient_check`: the exact coefficient obstruction and its unique admissible prime.
-- `p211_ball`: the full radius-five tree, with node labels, distances, and parent relations.
+| Field | Result and use |
+| --- | --- |
+| `status` | Successful completion of the verification. |
+| `proof_references` | The paper's proposition, lemma, and theorem numbers and the supplementary PDF filename. |
+| `summary` | Principal counts and conclusions. |
+| `symbolic_checks` | Hessian, coefficient-minor, and conic-restriction identities for Proposition 26, together with the square-sum identity of Lemma 27. |
+| `moment_screen` | 69 parameter pairs, 19532 integer multisets, and 43 candidates passing the prime and moment conditions. |
+| `polynomial_screen` | Complete normalized polynomial searches over the three remaining parameter triples. |
+| `boundary_code` | The length-78 binary matrix rank, a kernel basis, the complete weight distribution, and a weight-16 codeword. |
+| `coefficient_check` | The exact exceptional-prime obstruction 1055 = 5*211. |
+| `p211_ball` | All nodes and parent relations of the radius-five tree at (p,j,k) = (211,3,5). |
 
-Read the final section of the PDF for the mathematical meaning and proof role of these fields. The structural proposition has a complete written proof; the symbolic calculations check its algebraic identities, and the finite computations close the neighboring-order distance proof. Numerical examples, numerical tables, and conjecture scans are outside this package's verification scope.
+The normalized polynomial searches test 13, 361, and 923521 polynomials for (p,j,k) = (13,4,6), (19,6,9), and (31,10,15), respectively. Only the first case gives matches, namely q(U) = plus or minus 2(U^2-U). Full enumeration of its binary kernel gives minimum distance 16. At the exceptional prime, the tree layers have sizes 1, 3, 12, 24, 96, 192, with zero non-tree edges. These calculations complete the finite branches of Theorem 30.
 
-**Referencing this material**
+The final section of the PDF explains each output field, the binary-coordinate encoding, and the deductions used in the proofs. All computations use exact symbolic expressions, integers, rational numbers, and finite-field residues.
 
-When referring to these files in a manuscript, use a link to the specific repository commit containing the corresponding supplementary material. Use the same commit for the PDF, program, and result file so that the cited proof and computations remain tied to one version. The repository homepage provides access to the latest version.
+Repository: [Supplementary Material for Proposition 26](https://github.com/ShanghongXie83/Paramerters_of_Moore_type_QC-LDPC).
